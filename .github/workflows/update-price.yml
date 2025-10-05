@@ -3,7 +3,7 @@ name: Update Dollar Price
 on:
   schedule:
     - cron: '*/5 * * * *'  # هر ۵ دقیقه
-  workflow_dispatch:  # امکان اجرای دستی
+  workflow_dispatch:
 
 jobs:
   update-price:
@@ -14,7 +14,10 @@ jobs:
       
     - name: Fetch dollar price
       run: |
-        curl -s https://api.tgju.org/v1/data/sana/price > price_data.json
+        # آدرس صحیح TGJU API
+        curl -s "https://api.tgju.org/v1/data/sana/price" > price_data.json
+        
+        # استخراج قیمت با آدرس صحیح
         PRICE=$(python -c "import json; print(json.load(open('price_data.json'))['sana']['price'])")
         echo '{"price": '$PRICE', "last_updated": "'$(date +"%Y-%m-%d %H:%M:%S")'"}' > price.json
         
